@@ -9,6 +9,18 @@
   "redirects": [
     { "source": "/cn", "destination": "/", "statusCode": 301 },
     { "source": "/cn/:path*", "destination": "/:path*", "statusCode": 301 },
+    { "source": "/Equipment", "destination": "/RingWireSaws.html", "statusCode": 301 },
+    { "source": "/Equipment.html", "destination": "/RingWireSaws.html", "statusCode": 301 },
+    { "source": "/en/Equipment", "destination": "/en/RingWireSaws.html", "statusCode": 301 },
+    { "source": "/en/Equipment.html", "destination": "/en/RingWireSaws.html", "statusCode": 301 },
+    { "source": "/Materials", "destination": "/DiamondWire.html", "statusCode": 301 },
+    { "source": "/Materials.html", "destination": "/DiamondWire.html", "statusCode": 301 },
+    { "source": "/en/Materials", "destination": "/en/DiamondWire.html", "statusCode": 301 },
+    { "source": "/en/Materials.html", "destination": "/en/DiamondWire.html", "statusCode": 301 },
+    { "source": "/About", "destination": "/introduction.html", "statusCode": 301 },
+    { "source": "/About.html", "destination": "/introduction.html", "statusCode": 301 },
+    { "source": "/en/About", "destination": "/en/introduction.html", "statusCode": 301 },
+    { "source": "/en/About.html", "destination": "/en/introduction.html", "statusCode": 301 },
     { "source": "/en", "destination": "/en/index.html", "statusCode": 301 },
     { "source": "/en/:page([^/.]+)", "destination": "/en/:page.html", "statusCode": 301 },
     { "source": "/:page([^/.]+)", "destination": "/:page.html", "statusCode": 301 }

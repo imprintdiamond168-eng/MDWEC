@@ -276,7 +276,7 @@ export default function HeroCarousel({ lang }: { lang: Locale }) {
                       <span className="sheen" aria-hidden="true" />
                       <span>{slide.cta.label[lang]}</span>
                     </Link>
-                    <Link href={localePath("/Equipment", lang)} className="btn btn-ghost">
+                    <Link href={`${localePath("/", lang)}#products`} className="btn btn-ghost">
                       <span>{lang === "zh" ? "產品總覽" : "All products"}</span>
                       <svg viewBox="0 0 16 16" className="h-3 w-3" fill="none" stroke="currentColor">
                         <path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.4" strokeLinecap="round" />

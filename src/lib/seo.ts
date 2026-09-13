@@ -214,12 +214,16 @@ export function websiteLd(lang: Locale) {
   };
 }
 
-export type Crumb = { name: string; href: string };
+/** `href` is omitted for menu-only sections, which have no page to link to. */
+export type Crumb = { name: string; href?: string };
 
 export function breadcrumbLd(crumbs: Crumb[], lang: Locale) {
+  // Every ListItem needs a URL, so crumbs without a page are left out here
+  // even though the visible trail still shows them as plain text.
+  const linked = crumbs.filter((c): c is Required<Crumb> => !!c.href);
   return {
     "@type": "BreadcrumbList",
-    itemListElement: crumbs.map((c, i) => ({
+    itemListElement: linked.map((c, i) => ({
       "@type": "ListItem",
       position: i + 1,
       name: c.name,

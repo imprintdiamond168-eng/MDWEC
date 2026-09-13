@@ -11,10 +11,9 @@ import {
   PROCESSES,
   RESPONSIBILITY,
 } from "@/content/company";
-import { EQUIPMENT, MATERIALS, OEM, OEM_STEPS, RING_SAWS } from "@/content/products";
+import { OEM, OEM_STEPS, RING_SAWS } from "@/content/products";
 import { ENQUIRY_CHECKLIST, FAQS, KEY_FACTS } from "@/content/faq";
 import { ui, type Locale } from "@/lib/i18n";
-import WireSpecTables from "@/components/site/WireSpecTables";
 import FacetGem, { GEM_PALETTES } from "@/components/site/FacetGem";
 import {
   CtaBand,
@@ -31,155 +30,6 @@ const faqFor = (key: string, lang: Locale) =>
   (FAQS[key] ?? []).map((f) => ({ q: f.q[lang], a: f.a[lang] }));
 
 const crumbHome = (lang: Locale) => ({ name: ui("home", lang), href: "/" });
-
-/* ============================================================
-   Reusable product card grid
-   ============================================================ */
-function ProductCards({
-  items,
-  lang,
-  cols = 3,
-}: {
-  items: typeof EQUIPMENT;
-  lang: Locale;
-  cols?: 2 | 3;
-}) {
-  return (
-    <div className={`grid gap-5 md:grid-cols-2 ${cols === 3 ? "xl:grid-cols-3" : ""}`}>
-      {items.map((p, i) => (
-        <L
-          key={p.slug}
-          href={p.href}
-          lang={lang}
-          data-reveal
-          style={{ ["--d" as string]: `${(i % 3) * 80}ms` }}
-          className="glass gloss lift group relative flex flex-col overflow-hidden rounded-[24px] p-7 sm:p-8"
-        >
-          <div className="pointer-events-none absolute -right-14 -top-14 aspect-square w-48 opacity-55 transition-all duration-1000 ease-out group-hover:scale-110 group-hover:opacity-80">
-            <FacetGem
-              uid={`pc-${p.slug}`}
-              sides={p.sides}
-              rotate={p.rotate}
-              palette={GEM_PALETTES[p.palette] ?? GEM_PALETTES.ice}
-              sweep={false}
-              className="h-full w-full"
-            />
-          </div>
-          <div className="relative flex-1">
-            <p className="font-mono text-[14px] tracking-[0.1em] text-ink3">
-              {String(i + 1).padStart(2, "0")}
-            </p>
-            <h3 className="mt-4 text-[20px] font-medium tracking-tight text-ink sm:text-[22px]">
-              {p.name[lang]}
-            </h3>
-            {p.model && (
-              <p className="mt-2 font-mono text-[14px] tracking-[0.1em] text-steel">{p.model}</p>
-            )}
-            <p className="label mt-1.5 text-[14px] tracking-[0.1em]">{p.line}</p>
-            <p className="mt-5 text-[14px] leading-[1.9] text-ink2">{p.summary[lang]}</p>
-          </div>
-          <span className="relative mt-6 inline-flex items-center gap-2 border-t border-ink/8 pt-5 font-mono text-[14px] tracking-[0.1em] text-steel">
-            {ui("viewSpecs", lang)}
-            <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="none" stroke="currentColor">
-              <path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-          </span>
-        </L>
-      ))}
-    </div>
-  );
-}
-
-/* ============================================================
-   EQUIPMENT INDEX
-   ============================================================ */
-export function EquipmentIndex({ lang }: { lang: Locale }) {
-  return (
-    <>
-      <PageHero
-        label={t("設備 — Equipment", "Equipment", lang)}
-        title={t("線切割設備", "Wire saw equipment", lang)}
-        lead={t(
-          "MDWEC 線切割設備共七類，從桌面型環線切割機到 3,800 kg 的大型旋轉切割機，全部採微電腦及 PLC 控制，並可搭配 MDWEC 自製鑽石線使用。",
-          "MDWEC builds seven categories of wire saw equipment, from a benchtop ring saw to a 3,800 kg rotary machine. All are microcomputer and PLC controlled and run MDWEC's own diamond wire.",
-          lang,
-        )}
-        crumbs={[crumbHome(lang), { name: t("設備", "Equipment", lang), href: "/Equipment" }]}
-        lang={lang}
-        gem={{ sides: 12, rotate: -90, palette: "ice" }}
-      />
-
-      <section className="relative pb-6">
-        <div className={WRAP}>
-          <KeyFacts facts={KEY_FACTS.equipment[lang]} lang={lang} />
-        </div>
-      </section>
-
-      <section className="relative py-16 sm:py-20">
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute inset-0" data-speed="0.18">
-            <div className="absolute inset-[-25%] grid-fine opacity-50" />
-            <div className="prism absolute right-[8%] top-[14%] h-[30vw] w-[30vw] bg-[#b3dcf0] opacity-35" />
-          </div>
-        </div>
-        <div className={WRAP}>
-          <SectionHead
-            label={ui("productRange", lang)}
-            title={t("七類設備", "Seven equipment categories", lang)}
-          />
-          <div className="mb-5">
-            <L
-              href="/RingWireSaws"
-              lang={lang}
-              data-reveal
-              className="glass gloss lift group relative flex flex-wrap items-center justify-between gap-6 overflow-hidden rounded-[24px] p-7 sm:p-9"
-            >
-              <div className="pointer-events-none absolute -right-12 -top-16 aspect-square w-56 opacity-55 transition-transform duration-1000 group-hover:scale-110">
-                <FacetGem
-                  uid="eq-ring"
-                  sides={20}
-                  rotate={-60}
-                  palette={GEM_PALETTES.amber}
-                  sweep={false}
-                  className="h-full w-full"
-                />
-              </div>
-              <div className="relative max-w-2xl">
-                <h2 className="text-[22px] font-medium tracking-tight text-ink sm:text-[26px]">
-                  {t("環線切割機 KLDJ 系列", "KLDJ Ring Wire Saws", lang)}
-                </h2>
-                <p className="mt-2 font-mono text-[14px] tracking-[0.1em] text-steel">
-                  {RING_SAWS.length} {t("款機型", "models", lang)}
-                </p>
-                <p className="mt-4 max-w-xl text-[14px] leading-[1.9] text-ink2">
-                  {t(
-                    "適用於單材料切割，配合旋轉工作臺可進行同步旋轉切割，切片厚度可調。",
-                    "For single-material cutting; with a rotary table they perform synchronised rotary cutting at adjustable slice thickness.",
-                    lang,
-                  )}
-                </p>
-              </div>
-              <div className="relative flex flex-wrap gap-2">
-                {RING_SAWS.map((r) => (
-                  <span
-                    key={r.slug}
-                    className="rounded-full border border-ink/10 bg-white/70 px-3 py-1.5 font-mono text-[14px] text-ink2"
-                  >
-                    {r.model}
-                  </span>
-                ))}
-              </div>
-            </L>
-          </div>
-          <ProductCards items={EQUIPMENT} lang={lang} />
-        </div>
-      </section>
-
-      <FaqSection faqs={faqFor("equipment", lang)} lang={lang} />
-      <CtaBand lang={lang} />
-    </>
-  );
-}
 
 /* ============================================================
    RING WIRE SAW INDEX
@@ -212,7 +62,7 @@ export function RingIndex({ lang }: { lang: Locale }) {
         )}
         crumbs={[
           crumbHome(lang),
-          { name: t("設備", "Equipment", lang), href: "/Equipment" },
+          { name: t("設備", "Equipment", lang) },
           { name: t("環線切割機", "Ring Wire Cutting M/C", lang), href: "/RingWireSaws" },
         ]}
         lang={lang}
@@ -332,54 +182,6 @@ export function RingIndex({ lang }: { lang: Locale }) {
 }
 
 /* ============================================================
-   MATERIALS INDEX
-   ============================================================ */
-export function MaterialsIndex({ lang }: { lang: Locale }) {
-  return (
-    <>
-      <PageHero
-        label={t("物料 — Materiel", "Materiel", lang)}
-        title={t("切割耗材", "Cutting consumables", lang)}
-        lead={t(
-          "鑽石線、冷卻液、AB 膠、犧牲材與耐磨耗導輪 — 一整套為線切割製程設計的耗材系統，彼此配合，而不是各買各的。",
-          "Diamond wire, coolant, epoxy adhesive, sacrificial beam and wear-resistant pulleys — one consumable system designed around a single cutting process.",
-          lang,
-        )}
-        crumbs={[crumbHome(lang), { name: t("物料", "Materiel", lang), href: "/Materials" }]}
-        lang={lang}
-        gem={{ sides: 14, rotate: -90, palette: "jade" }}
-      />
-
-      <section className="relative pb-6">
-        <div className={WRAP}>
-          <KeyFacts facts={KEY_FACTS.materials[lang]} lang={lang} />
-        </div>
-      </section>
-
-      <section className="relative py-16 sm:py-20">
-        <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute inset-0" data-speed="0.22">
-            <div className="absolute inset-[-25%] grid-lines opacity-55" />
-            <div className="prism absolute left-[8%] top-[16%] h-[30vw] w-[30vw] bg-[#c6f0e0] opacity-35" />
-          </div>
-        </div>
-        <div className={WRAP}>
-          <SectionHead
-            label={ui("productRange", lang)}
-            title={t("五類耗材", "Five consumable categories", lang)}
-          />
-          <ProductCards items={MATERIALS} lang={lang} />
-        </div>
-      </section>
-
-      <WireSpecTables lang={lang} />
-      <FaqSection faqs={faqFor("materials", lang)} lang={lang} />
-      <CtaBand lang={lang} />
-    </>
-  );
-}
-
-/* ============================================================
    OEM
    ============================================================ */
 export function OemPage({ lang }: { lang: Locale }) {
@@ -477,96 +279,9 @@ export function OemPage({ lang }: { lang: Locale }) {
    ============================================================ */
 const aboutCrumbs = (lang: Locale, leaf?: { name: string; href: string }) => [
   crumbHome(lang),
-  { name: t("關於微鑽石", "About", lang), href: "/About" },
+  { name: t("關於微鑽石", "About", lang) },
   ...(leaf ? [leaf] : []),
 ];
-
-export function AboutIndex({ lang }: { lang: Locale }) {
-  const links = [
-    { zh: "公司願景", en: "Vision", href: "/introduction", pal: "ice", sides: 9 },
-    { zh: "歷史沿革", en: "History", href: "/history", pal: "iris", sides: 13 },
-    { zh: "經營理念", en: "Management Philosophy", href: "/management", pal: "jade", sides: 17 },
-    { zh: "社會責任", en: "Responsibility", href: "/responsibility", pal: "amber", sides: 21 },
-  ];
-  return (
-    <>
-      <PageHero
-        label={t("關於微鑽石 — About", "About MDWEC", lang)}
-        title={t("以鑽石為企業發展核心", "Diamond is the core of our business", lang)}
-        lead={ABOUT_PARAGRAPHS[lang][1]}
-        crumbs={aboutCrumbs(lang)}
-        lang={lang}
-        gem={{ sides: 20, rotate: -96, palette: "ice" }}
-      />
-
-      <section className="relative pb-6">
-        <div className={WRAP}>
-          <KeyFacts facts={KEY_FACTS.about[lang]} lang={lang} />
-        </div>
-      </section>
-
-      <section className="relative py-16 sm:py-20">
-        <div className={WRAP}>
-          <SectionHead label={ui("sections", lang)} title={t("關於我們的四件事", "Four sections", lang)} />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {links.map((c, i) => (
-              <L
-                key={c.href}
-                href={c.href}
-                lang={lang}
-                data-reveal
-                style={{ ["--d" as string]: `${i * 80}ms` }}
-                className="glass gloss lift group relative overflow-hidden rounded-[24px] p-7"
-              >
-                <div className="pointer-events-none absolute -right-12 -top-12 aspect-square w-40 opacity-55 transition-transform duration-1000 group-hover:scale-110">
-                  <FacetGem
-                    uid={`about-${i}`}
-                    sides={c.sides}
-                    rotate={-90 + i * 14}
-                    palette={GEM_PALETTES[c.pal]}
-                    sweep={false}
-                    className="h-full w-full"
-                  />
-                </div>
-                <div className="relative">
-                  <p className="font-mono text-[14px] tracking-[0.1em] text-ink3">0{i + 1}</p>
-                  <h2 className="mt-4 text-[18px] font-medium tracking-tight text-ink">
-                    {lang === "zh" ? c.zh : c.en}
-                  </h2>
-                  <p className="label mt-2 text-[14px] tracking-[0.1em]">{c.en}</p>
-                  <span className="mt-7 inline-flex items-center gap-2 font-mono text-[14px] tracking-[0.1em] text-steel">
-                    {ui("readMore", lang)}
-                    <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="none" stroke="currentColor">
-                      <path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.6" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                </div>
-              </L>
-            ))}
-          </div>
-
-          <article className="glass gloss mt-8 rounded-[24px] p-8 sm:p-10" data-reveal>
-            {ABOUT_PARAGRAPHS[lang].map((p, i) => (
-              <p
-                key={i}
-                className={
-                  i === 0
-                    ? "text-[15.5px] leading-[2.05] text-ink"
-                    : "mt-6 text-[14.5px] leading-[2.05] text-ink2"
-                }
-              >
-                {p}
-              </p>
-            ))}
-          </article>
-        </div>
-      </section>
-
-      <FaqSection faqs={faqFor("about", lang)} lang={lang} />
-      <CtaBand lang={lang} />
-    </>
-  );
-}
 
 export function IntroductionPage({ lang }: { lang: Locale }) {
   const facts: [string, string][] = [

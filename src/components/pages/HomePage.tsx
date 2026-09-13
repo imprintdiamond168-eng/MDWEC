@@ -31,7 +31,7 @@ export default function HomePage({ lang }: { lang: Locale }) {
     {
       label: t("設備", "Equipment", lang),
       line: "Equipment",
-      href: "/Equipment",
+      href: null,
       blurb: t(
         "七類線切割設備，從桌面型環線切割機到 3,800 kg 的大型旋轉切割機。",
         "Seven categories of wire saw equipment, from a benchtop ring saw to a 3,800 kg rotary machine.",
@@ -51,7 +51,7 @@ export default function HomePage({ lang }: { lang: Locale }) {
     {
       label: t("物料", "Materiel", lang),
       line: "Materiel",
-      href: "/Materials",
+      href: null,
       blurb: t(
         "鑽石線、冷卻液、AB 膠、犧牲材與導輪 — 為同一條線切割製程設計。",
         "Diamond wire, coolant, epoxy adhesive, sacrificial beam and pulleys — one matched system.",
@@ -136,7 +136,7 @@ export default function HomePage({ lang }: { lang: Locale }) {
       </section>
 
       {/* product directory — names and links only */}
-      <section className="relative py-16 sm:py-20">
+      <section id="products" className="relative scroll-mt-20 py-16 sm:py-20">
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
           {/* Three depths rather than one slab: the grid sits furthest back, the
               two prisms drift apart from each other as the section passes. The
@@ -164,7 +164,7 @@ export default function HomePage({ lang }: { lang: Locale }) {
           <div className="grid gap-5 lg:grid-cols-3">
             {groups.map((g, i) => (
               <div
-                key={g.href}
+                key={g.line}
                 data-reveal
                 style={{ ["--d" as string]: `${i * 90}ms` }}
                 className="glass gloss relative flex flex-col overflow-hidden rounded-[24px] p-8"
@@ -220,16 +220,18 @@ export default function HomePage({ lang }: { lang: Locale }) {
                   ))}
                 </ul>
 
-                <L
-                  href={g.href}
-                  lang={lang}
-                  className="relative mt-6 inline-flex items-center gap-2 font-mono text-[14px] tracking-[0.1em] text-steel transition-colors hover:text-ink"
-                >
-                  {lang === "zh" ? `全部${g.label}` : `All ${g.label}`}
-                  <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="none" stroke="currentColor">
-                    <path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.6" strokeLinecap="round" />
-                  </svg>
-                </L>
+                {g.href && (
+                  <L
+                    href={g.href}
+                    lang={lang}
+                    className="relative mt-6 inline-flex items-center gap-2 font-mono text-[14px] tracking-[0.1em] text-steel transition-colors hover:text-ink"
+                  >
+                    {lang === "zh" ? `全部${g.label}` : `All ${g.label}`}
+                    <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="none" stroke="currentColor">
+                      <path d="M3 8h10M9 4l4 4-4 4" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </L>
+                )}
               </div>
             ))}
           </div>

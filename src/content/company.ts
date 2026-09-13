@@ -47,7 +47,8 @@ export const COMPANY = {
 export type NavChild = { label: LS; href: string };
 export type NavItem = {
   label: LS;
-  href: string;
+  /** omitted for menu-only sections: they open a dropdown but have no page */
+  href?: string;
   /** a sub-branch that itself has children (設備 › 環線切割機 › KLDJ…) */
   groups?: { label: LS; href: string; children: NavChild[] }[];
   children?: NavChild[];
@@ -56,7 +57,6 @@ export type NavItem = {
 export const NAV: NavItem[] = [
   {
     label: { zh: "設備", en: "Equipment" },
-    href: "/Equipment",
     groups: [
       {
         label: { zh: "環線切割機", en: "Ring Wire Cutting M/C" },
@@ -86,7 +86,6 @@ export const NAV: NavItem[] = [
   },
   {
     label: { zh: "物料", en: "Materiel" },
-    href: "/Materials",
     children: [
       { label: { zh: "鑽石線", en: "Diamond Wire" }, href: "/DiamondWire" },
       { label: { zh: "冷卻液", en: "Diamond Coolant" }, href: "/Coolant" },
@@ -98,7 +97,6 @@ export const NAV: NavItem[] = [
   { label: { zh: "代工服務", en: "OEM Service" }, href: "/OEM" },
   {
     label: { zh: "關於微鑽石", en: "About" },
-    href: "/About",
     children: [
       { label: { zh: "公司願景", en: "Vision" }, href: "/introduction" },
       { label: { zh: "歷史沿革", en: "History" }, href: "/history" },
@@ -210,7 +208,7 @@ export const HERO_SLIDES: HeroSlide[] = [
         "Reach a Great Sales Achievement with The Well-known Large Companies",
       ],
     },
-    cta: { label: { zh: "瀏覽全部設備", en: "Browse all equipment" }, href: "/Equipment" },
+    cta: { label: { zh: "環線切割機 KLDJ 系列", en: "KLDJ ring wire saws" }, href: "/RingWireSaws" },
     palette: "steel",
     sides: 9,
     rotate: -100,

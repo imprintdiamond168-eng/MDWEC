@@ -1,14 +1,14 @@
+import Link from "next/link";
 import { findProduct, type Product } from "@/content/products";
 import { productLeadImage } from "@/content/productImages";
 import { productFaqs, productKeyFacts } from "@/content/productFaq";
 import { FAQS, KEY_FACTS } from "@/content/faq";
-import { ui, type Locale } from "@/lib/i18n";
+import { localePath, ui, type Locale } from "@/lib/i18n";
 import type { Crumb } from "@/lib/seo";
 import {
   CtaBand,
   FaqList,
   FeatureList,
-  L,
   PageHero,
   RelatedGrid,
   SectionHead,
@@ -23,7 +23,7 @@ export function productCrumbs(p: Product, lang: Locale): Crumb[] {
   if (p.group === "ring") {
     return [
       { name: home, href: "/" },
-      { name: lang === "zh" ? "設備" : "Equipment", href: "/Equipment" },
+      { name: lang === "zh" ? "設備" : "Equipment" },
       {
         name: lang === "zh" ? "環線切割機" : "Ring Wire Cutting M/C",
         href: "/RingWireSaws",
@@ -42,7 +42,6 @@ export function productCrumbs(p: Product, lang: Locale): Crumb[] {
           : lang === "zh"
             ? "物料"
             : "Materiel",
-      href: p.category === "equipment" ? "/Equipment" : "/Materials",
     },
     { name: p.name[lang], href: p.href },
   ];
@@ -207,23 +206,17 @@ export default function ProductDetail({ product, lang }: { product: Product; lan
 
       <section className="relative pb-6">
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10">
-          <L
-            href={product.category === "equipment" ? "/Equipment" : "/Materials"}
-            lang={lang}
+          {/* 設備 and 物料 have no index page any more, so go back to the
+              product directory on the home page instead. */}
+          <Link
+            href={`${localePath("/", lang)}#products`}
             className="inline-flex items-center gap-2 font-mono text-[14px] tracking-[0.1em] text-steel transition-colors hover:text-ink"
           >
             <svg viewBox="0 0 16 16" className="h-2.5 w-2.5" fill="none" stroke="currentColor">
               <path d="M13 8H3M7 4L3 8l4 4" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
-            {ui("backTo", lang)}{" "}
-            {product.category === "equipment"
-              ? lang === "zh"
-                ? "設備"
-                : "Equipment"
-              : lang === "zh"
-                ? "物料"
-                : "Materiel"}
-          </L>
+            {ui("backTo", lang)} {lang === "zh" ? "產品總覽" : "all products"}
+          </Link>
         </div>
       </section>
 

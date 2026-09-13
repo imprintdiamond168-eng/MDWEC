@@ -12,6 +12,12 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
+  # 0. 設備 / 物料 / 關於微鑽石 are menu-only sections with no page of their
+  #    own. Send their old URLs to the first page in each dropdown.
+  RewriteRule ^(en/)?Equipment(\.html)?$ /$1RingWireSaws.html [R=301,L]
+  RewriteRule ^(en/)?Materials(\.html)?$ /$1DiamondWire.html [R=301,L]
+  RewriteRule ^(en/)?About(\.html)?$ /$1introduction.html [R=301,L]
+
   # 1. The old site had a Simplified Chinese tree at /cn/ that this site does
   #    not. Send each page to its Traditional Chinese twin, and anything with
   #    no twin to the home page.

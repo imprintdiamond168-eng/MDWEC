@@ -13,13 +13,10 @@ import { FAQS } from "@/content/faq";
 import { productDescription, productFaqs, productTitle } from "@/content/productFaq";
 import ProductDetail, { productCrumbs } from "@/components/site/ProductDetail";
 import {
-  AboutIndex,
   ContactPage,
-  EquipmentIndex,
   HistoryPage,
   IntroductionPage,
   ManagementPage,
-  MaterialsIndex,
   NewsPage,
   OemPage,
   ResponsibilityPage,
@@ -101,49 +98,6 @@ const STATIC: Record<string, Page> = {
       }),
   },
 
-  "/Equipment": {
-    render: (lang) => (
-      <>
-        <JsonLd
-          data={graph(
-            webPageLd({
-              name: z("線切割設備", "Wire saw equipment", lang),
-              description: z("MDWEC 線切割設備總覽。", "MDWEC wire saw equipment range.", lang),
-              path: "/Equipment",
-              lang,
-            }),
-            breadcrumbLd([home(lang), { name: z("設備", "Equipment", lang), href: "/Equipment" }], lang),
-            itemListLd(
-              [
-                { name: z("環線切割機", "Ring Wire Cutting M/C", lang), href: "/RingWireSaws" },
-                ...EQUIPMENT.map((p) => ({ name: p.name[lang], href: p.href })),
-              ],
-              z("MDWEC 線切割設備", "MDWEC wire saw equipment", lang),
-              lang,
-            ),
-            faqLd(faqPlain("equipment", lang)),
-          )}
-        />
-        <EquipmentIndex lang={lang} />
-      </>
-    ),
-    meta: (lang) =>
-      buildMetadata({
-        title: z("線切割設備", "Wire Saw Equipment", lang),
-        description: z(
-          "MDWEC 線切割設備共七類：環線切割機（KLDJ 系列十款）、單刃式線切割機、多刃式線切割機、晶粒切割機、多功能開方機、固液分離機與盤線機。搭配 MDWEC 鑽石線可縮短 50% 切割工時。",
-          "Seven categories of MDWEC wire saw equipment: KLDJ ring wire saws (ten models), single wire saws, multi wire saws, wafer dicing saws, the AnyCut squaring machine, the G-Power separator and the wire winding machine.",
-          lang,
-        ),
-        path: "/Equipment",
-        lang,
-        keywords:
-          lang === "zh"
-            ? ["線切割機", "環線切割機", "多刃式線切割機", "晶粒切割機", "開方機"]
-            : ["wire saw machine", "ring wire saw", "multi wire saw", "wafer dicing saw", "squaring machine"],
-      }),
-  },
-
   "/RingWireSaws": {
     render: (lang) => (
       <>
@@ -162,7 +116,7 @@ const STATIC: Record<string, Page> = {
             breadcrumbLd(
               [
                 home(lang),
-                { name: z("設備", "Equipment", lang), href: "/Equipment" },
+                { name: z("設備", "Equipment", lang) },
                 {
                   name: z("環線切割機", "Ring Wire Cutting M/C", lang),
                   href: "/RingWireSaws",
@@ -192,46 +146,6 @@ const STATIC: Record<string, Page> = {
         path: "/RingWireSaws",
         lang,
         keywords: ["KLDJ", "ring wire saw", "環線切割機", "rotary wire cutting", "contour cutting"],
-      }),
-  },
-
-  "/Materials": {
-    render: (lang) => (
-      <>
-        <JsonLd
-          data={graph(
-            webPageLd({
-              name: z("切割耗材", "Cutting consumables", lang),
-              description: z("MDWEC 切割耗材總覽。", "MDWEC cutting consumables range.", lang),
-              path: "/Materials",
-              lang,
-            }),
-            breadcrumbLd([home(lang), { name: z("物料", "Materiel", lang), href: "/Materials" }], lang),
-            itemListLd(
-              MATERIALS.map((p) => ({ name: p.name[lang], href: p.href })),
-              z("MDWEC 切割耗材", "MDWEC cutting consumables", lang),
-              lang,
-            ),
-            faqLd(faqPlain("materials", lang)),
-          )}
-        />
-        <MaterialsIndex lang={lang} />
-      </>
-    ),
-    meta: (lang) =>
-      buildMetadata({
-        title: z("切割耗材", "Cutting Consumables", lang),
-        description: z(
-          "MDWEC 切割耗材共五類：鑽石線（EP 電鍍／RB 樹脂）、鑽石線切割用冷卻液、GigaBond A/B 膠、犧牲材與耐磨耗導輪。為同一條線切割製程設計，可互相搭配。",
-          "Five MDWEC cutting consumables: diamond wire (EP electroplated / RB resin bond), Dia-Coolant, GigaBond A/B epoxy, sacrificial beam and Dia-Pulley guide pulleys — one matched system.",
-          lang,
-        ),
-        path: "/Materials",
-        lang,
-        keywords:
-          lang === "zh"
-            ? ["鑽石線", "金剛線", "冷卻液", "AB膠", "GigaBond", "犧牲材", "導輪"]
-            : ["diamond wire", "cutting coolant", "epoxy adhesive", "sacrificial beam", "guide pulley"],
       }),
   },
 
@@ -291,37 +205,6 @@ const STATIC: Record<string, Page> = {
       }),
   },
 
-  "/About": {
-    render: (lang) => (
-      <>
-        <JsonLd
-          data={graph(
-            webPageLd({
-              name: z("關於微鑽石", "About MDWEC", lang),
-              description: COMPANY.tagline[lang],
-              path: "/About",
-              lang,
-            }),
-            breadcrumbLd([home(lang), { name: z("關於微鑽石", "About", lang), href: "/About" }], lang),
-            faqLd(faqPlain("about", lang)),
-          )}
-        />
-        <AboutIndex lang={lang} />
-      </>
-    ),
-    meta: (lang) =>
-      buildMetadata({
-        title: z("關於微鑽石", "About MDWEC", lang),
-        description: z(
-          "微鑽石線材設備有限公司（MDWEC）創立於 2007 年，為 WEC 集團子公司，承襲二十幾年金剛石工具製造經驗，專業於鑽石線鋸與線切割設備的研究開發、整合、製造與銷售。",
-          "Micron Diamond Wire & Equipment Co., Ltd. (MDWEC) was founded in 2007 as a subsidiary of WEC Group, building on more than 20 years of diamond tool manufacturing.",
-          lang,
-        ),
-        path: "/About",
-        lang,
-      }),
-  },
-
   "/introduction": {
     render: (lang) => (
       <>
@@ -336,7 +219,7 @@ const STATIC: Record<string, Page> = {
             breadcrumbLd(
               [
                 home(lang),
-                { name: z("關於微鑽石", "About", lang), href: "/About" },
+                { name: z("關於微鑽石", "About", lang) },
                 { name: z("公司願景", "Vision", lang), href: "/introduction" },
               ],
               lang,
@@ -378,7 +261,7 @@ const STATIC: Record<string, Page> = {
             breadcrumbLd(
               [
                 home(lang),
-                { name: z("關於微鑽石", "About", lang), href: "/About" },
+                { name: z("關於微鑽石", "About", lang) },
                 { name: z("歷史沿革", "History", lang), href: "/history" },
               ],
               lang,
@@ -437,7 +320,7 @@ const STATIC: Record<string, Page> = {
             breadcrumbLd(
               [
                 home(lang),
-                { name: z("關於微鑽石", "About", lang), href: "/About" },
+                { name: z("關於微鑽石", "About", lang) },
                 { name: z("經營理念", "Management Philosophy", lang), href: "/management" },
               ],
               lang,
@@ -471,7 +354,7 @@ const STATIC: Record<string, Page> = {
             breadcrumbLd(
               [
                 home(lang),
-                { name: z("關於微鑽石", "About", lang), href: "/About" },
+                { name: z("關於微鑽石", "About", lang) },
                 { name: z("社會責任", "Responsibility", lang), href: "/responsibility" },
               ],
               lang,
@@ -639,14 +522,11 @@ export const PAGES: Record<string, Page> = {
 /** Every logical path, in sitemap order. */
 export const ALL_PATHS: string[] = [
   "/",
-  "/Equipment",
   "/RingWireSaws",
   ...EQUIPMENT.map((p) => p.href),
   ...RING_SAWS.map((p) => p.href),
-  "/Materials",
   ...MATERIALS.map((p) => p.href),
   "/OEM",
-  "/About",
   "/introduction",
   "/history",
   "/management",

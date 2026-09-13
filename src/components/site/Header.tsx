@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { COMPANY, NAV } from "@/content/company";
+import { COMPANY, NAV, type NavItem } from "@/content/company";
 import { localePath, stripLocale, ui, type Locale } from "@/lib/i18n";
 
 function LangSwitch({ lang, path }: { lang: Locale; path: string }) {
@@ -61,8 +61,19 @@ export default function Header({ lang }: { lang: Locale }) {
     };
   }, [open]);
 
-  const isActive = (href: string) =>
-    href === "/" ? logicalPath === "/" : logicalPath.startsWith(href);
+  const isActive = (item: NavItem) => {
+    // A menu-only section has no page of its own, so it reads as active when
+    // the current page is anywhere in its dropdown.
+    if (item.children?.length || item.groups?.length) {
+      const hrefs = [
+        ...(item.children ?? []).map((c) => c.href),
+        ...(item.groups ?? []).flatMap((g) => [g.href, ...g.children.map((c) => c.href)]),
+      ];
+      return hrefs.includes(logicalPath);
+    }
+    if (!item.href) return false;
+    return item.href === "/" ? logicalPath === "/" : logicalPath.startsWith(item.href);
+  };
 
   return (
     <>
@@ -135,21 +146,28 @@ export default function Header({ lang }: { lang: Locale }) {
               {NAV.map((item) => {
                 const hasMenu = !!(item.children?.length || item.groups?.length);
                 const isOpen = openMenu === item.label.en;
+                const triggerClass = `nav-link flex items-center gap-1.5 whitespace-nowrap py-2 text-[14px] ${
+                  isActive(item) ? "!text-ink" : ""
+                }`;
                 return (
                   <div
-                    key={item.href}
+                    key={item.label.en}
                     className="relative"
                     onMouseEnter={() => setOpenMenu(hasMenu ? item.label.en : null)}
                   >
-                    <Link
-                      href={localePath(item.href, lang)}
-                      className={`nav-link flex items-center gap-1.5 whitespace-nowrap py-2 text-[14px] ${
-                        isActive(item.href) ? "!text-ink" : ""
-                      }`}
-                      aria-expanded={hasMenu ? isOpen : undefined}
-                    >
-                      {item.label[lang]}
-                      {hasMenu && (
+                    {hasMenu || !item.href ? (
+                      /* A section with a dropdown has no page behind its label:
+                         pointing at it opens the menu and clicking does nothing.
+                         Focus opens it too, so keyboard users can still reach
+                         the links inside. */
+                      <button
+                        type="button"
+                        className={`${triggerClass} cursor-default`}
+                        aria-expanded={isOpen}
+                        aria-haspopup="true"
+                        onFocus={() => setOpenMenu(item.label.en)}
+                      >
+                        {item.label[lang]}
                         <svg
                           viewBox="0 0 10 10"
                           className={`h-2 w-2 transition-transform duration-300 ${
@@ -161,8 +179,12 @@ export default function Header({ lang }: { lang: Locale }) {
                         >
                           <path d="M2 4l3 3 3-3" strokeWidth="1.4" strokeLinecap="round" />
                         </svg>
-                      )}
-                    </Link>
+                      </button>
+                    ) : (
+                      <Link href={localePath(item.href, lang)} className={triggerClass}>
+                        {item.label[lang]}
+                      </Link>
+                    )}
 
                     {/* The panel slides and toggles visibility, but never
                         animates opacity. An element at opacity between 0 and 1
@@ -313,22 +335,18 @@ export default function Header({ lang }: { lang: Locale }) {
               const hasMenu = !!(item.children?.length || item.groups?.length);
               const expanded = openMobile === item.label.en;
               return (
-                <div key={item.href} className="border-b border-ink/8 last:border-0">
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={localePath(item.href, lang)}
-                      className="flex-1 py-4 text-[19px] font-medium tracking-tight text-ink"
+                <div key={item.label.en} className="border-b border-ink/8 last:border-0">
+                  {hasMenu || !item.href ? (
+                    /* Touch has no hover, so on a phone the whole row toggles
+                       the section open instead of leading to a page. */
+                    <button
+                      type="button"
+                      onClick={() => setOpenMobile(expanded ? null : item.label.en)}
+                      aria-expanded={expanded}
+                      className="flex w-full items-center justify-between py-4 text-left text-[19px] font-medium tracking-tight text-ink"
                     >
                       {item.label[lang]}
-                    </Link>
-                    {hasMenu && (
-                      <button
-                        type="button"
-                        onClick={() => setOpenMobile(expanded ? null : item.label.en)}
-                        aria-expanded={expanded}
-                        aria-label={item.label[lang]}
-                        className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink2"
-                      >
+                      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink2">
                         <svg
                           viewBox="0 0 12 12"
                           className={`h-3 w-3 transition-transform duration-500 ${
@@ -336,12 +354,20 @@ export default function Header({ lang }: { lang: Locale }) {
                           }`}
                           fill="none"
                           stroke="currentColor"
+                          aria-hidden="true"
                         >
                           <path d="M6 1v10M1 6h10" strokeWidth="1.4" strokeLinecap="round" />
                         </svg>
-                      </button>
-                    )}
-                  </div>
+                      </span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={localePath(item.href, lang)}
+                      className="block py-4 text-[19px] font-medium tracking-tight text-ink"
+                    >
+                      {item.label[lang]}
+                    </Link>
+                  )}
 
                   {hasMenu && (
                     <div

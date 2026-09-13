@@ -78,7 +78,8 @@ export default function Footer({ lang }: { lang: Locale }) {
             <p className="label">{ui("navigation", lang)}</p>
             <div className="prism-rule mt-3 w-10" />
             <ul className="mt-5 grid grid-cols-2 gap-x-8 gap-y-3">
-              {NAV.map((n) => (
+              {/* menu-only sections (設備, 物料, 關於微鑽石) have no page to link to */}
+              {NAV.flatMap((n) => (n.href ? [{ ...n, href: n.href }] : [])).map((n) => (
                 <li key={n.href}>
                   <Link
                     href={localePath(n.href, lang)}

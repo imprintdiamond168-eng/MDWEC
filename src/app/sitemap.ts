@@ -8,13 +8,10 @@ export const dynamic = "force-static";
 
 const PRIORITY: Record<string, number> = {
   "/": 1.0,
-  "/Equipment": 0.9,
   "/RingWireSaws": 0.9,
-  "/Materials": 0.9,
   "/OEM": 0.8,
   "/Contact": 0.8,
   "/news": 0.7,
-  "/About": 0.7,
 };
 
 export default function sitemap(): MetadataRoute.Sitemap {

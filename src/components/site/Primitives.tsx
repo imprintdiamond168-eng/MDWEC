@@ -45,11 +45,13 @@ export function Breadcrumbs({ crumbs, lang }: { crumbs: Crumb[]; lang: Locale })
       {crumbs.map((c, i) => {
         const last = i === crumbs.length - 1;
         return (
-          <span key={c.href} className="flex items-center gap-2">
+          <span key={`${i}-${c.name}`} className="flex items-center gap-2">
             {last ? (
               <span aria-current="page" className="font-mono text-[14px] tracking-[0.1em] text-ink2">
                 {c.name}
               </span>
+            ) : !c.href ? (
+              <span className="font-mono text-[14px] tracking-[0.1em] text-ink3">{c.name}</span>
             ) : (
               <L
                 href={c.href}
