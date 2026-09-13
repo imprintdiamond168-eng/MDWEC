@@ -1,0 +1,58 @@
+# ── MDWEC static site ────────────────────────────────────────────────
+# Drop this alongside index.html on an Apache host. Safe to delete on
+# nginx/IIS (they need their own equivalent).
+
+# Serve the custom 404 page
+ErrorDocument 404 /404.html
+
+# ── Legacy URL compatibility ─────────────────────────────────────────
+# This site deliberately reuses the previous MDWEC site's URLs, so
+# /MultiWireSaws.html and friends are served directly by the files the
+# export produces. Only two cases need help.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. The old site had a Simplified Chinese tree at /cn/ that this site does
+  #    not. Send each page to its Traditional Chinese twin, and anything with
+  #    no twin to the home page.
+  RewriteCond %{DOCUMENT_ROOT}/$1 -f
+  RewriteRule ^cn/(.+)$ /$1 [R=301,L]
+  RewriteRule ^cn(/.*)?$ / [R=301,L]
+
+  # 2. A URL typed or linked without the .html suffix. Redirect rather than
+  #    serve both, so a page never has two working addresses.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(.+?)/?$ /$1.html [R=301,L]
+</IfModule>
+
+
+# Compress text assets — the pages are SVG-heavy and compress to ~15%
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml
+</IfModule>
+
+# Long cache for fingerprinted build assets, short for HTML
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 1 hour"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# UTF-8 everywhere
+AddDefaultCharset UTF-8
