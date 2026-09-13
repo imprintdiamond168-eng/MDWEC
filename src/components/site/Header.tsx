@@ -347,16 +347,19 @@ export default function Header({ lang }: { lang: Locale }) {
                     >
                       {item.label[lang]}
                       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-ink/10 text-ink2">
-                        <svg
-                          viewBox="0 0 12 12"
-                          className={`h-3 w-3 transition-transform duration-500 ${
-                            expanded ? "rotate-45" : ""
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path d="M6 1v10M1 6h10" strokeWidth="1.4" strokeLinecap="round" />
+                        {/* Plus to minus, not plus to ×: a + turned 45° spans only
+                            ~70% as wide, so the icon visibly shrank as the section
+                            opened. Folding the vertical bar flat keeps its width. */}
+                        <svg viewBox="0 0 12 12" className="h-3 w-3" fill="none" stroke="currentColor" aria-hidden="true">
+                          <path d="M1 6h10" strokeWidth="1.4" strokeLinecap="round" />
+                          <path
+                            d="M6 1v10"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            className={`origin-center transform-fill transition-transform duration-500 ease-out ${
+                              expanded ? "rotate-90" : ""
+                            }`}
+                          />
                         </svg>
                       </span>
                     </button>
