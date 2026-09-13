@@ -78,15 +78,25 @@ export default function Header({ lang }: { lang: Locale }) {
 
           Once the page scrolls, page content passes under the bar and bare
           text over bare text is unreadable, so a full-bleed wash fades in —
-          the width of the viewport, not the rounded pill this replaced. */}
+          the width of the viewport, not the rounded pill this replaced.
+
+          The wash is a sibling layer, never classes on <header> itself. An
+          element with backdrop-filter is a backdrop root for its descendants,
+          so blurring the header left the dropdown's .frost panel sampling only
+          the bar: once scrolled, the menu turned into a thin see-through sheet
+          with the page reading straight through it. */}
       <header
         className={`fixed inset-x-0 top-0 z-50 border-b border-ink/10 transition-all duration-700 ease-out ${
-          scrolled
-            ? "bg-paper/72 py-2 backdrop-blur-xl backdrop-saturate-150"
-            : "py-4 sm:py-5"
+          scrolled ? "py-2" : "py-4 sm:py-5"
         }`}
         onMouseLeave={() => setOpenMenu(null)}
       >
+        <div
+          aria-hidden="true"
+          className={`pointer-events-none absolute inset-0 -z-10 bg-paper/72 backdrop-blur-xl backdrop-saturate-150 transition-opacity duration-700 ease-out ${
+            scrolled ? "opacity-100" : "opacity-0"
+          }`}
+        />
         <div className="mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10">
           <div
             className={`relative flex items-center justify-between transition-all duration-700 ease-out ${
