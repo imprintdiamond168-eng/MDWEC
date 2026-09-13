@@ -50,6 +50,9 @@ html {
   scroll-behavior: smooth;
   background: var(--paper);
   -webkit-tap-highlight-color: transparent;
+  /* Keep the page scrollbar's space when the mobile drawer locks scrolling
+     (body overflow: hidden), so the page and header don't jump sideways. */
+  scrollbar-gutter: stable;
   /*
     Deliberately no scroll-padding-top here, despite the fixed header. Next's
     router reads html's scroll-padding-top to decide whether a freshly

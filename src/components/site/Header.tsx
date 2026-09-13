@@ -318,9 +318,13 @@ export default function Header({ lang }: { lang: Locale }) {
             rules opacity out for the desktop dropdown does not bite here:
             the drawer covers the screen over a scrim that is already 85%
             paper, so there is nothing behind it for the blur to reveal, and
-            a drawer that vanishes mid-slide instead of fading looks broken. */}
+            a drawer that vanishes mid-slide instead of fading looks broken.
+
+            Its scrollbar is hidden (it still scrolls). The site's classic 11px
+            scrollbar appeared as soon as an expanded section made the drawer
+            overflow, and pushed the + icons and the language switch sideways. */}
         <div
-          className={`frost absolute inset-x-3 top-24 max-h-[calc(100dvh-7.5rem)] overflow-y-auto rounded-[28px] p-6 transition-all duration-700 ease-out ${
+          className={`frost absolute inset-x-3 top-24 max-h-[calc(100dvh-7.5rem)] overflow-y-auto rounded-[28px] p-6 transition-all duration-700 ease-out [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
             open ? "translate-y-0 opacity-100" : "-translate-y-6 opacity-0"
           }`}
         >
